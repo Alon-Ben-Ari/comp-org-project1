@@ -113,7 +113,6 @@ int get_label(char* line, char* label) {
 
 
 void save_labels(FILE* fp, char** labels) {
-	// TODO: free the labels in the end of the program
 	// Gets a file pointer and a pointer to the labels' array.
 	// Iterates the file, extracts the label (see get_label func)
 	// and increment the address var only if there's an instruction
@@ -284,7 +283,7 @@ void parse_asm(char* curr_chr, char** labels, Instruction* inst_pt) {
 	char token[MAX_IMM_LEN + 1] = { 0 };	// Set to the imm len because its the longest field
 	char* next_chr = curr_chr+1;
 	
-	while (*curr_chr != '\n') {	// iterate until the end of the given line 
+	while (*curr_chr != '\0') {	// iterate until the end of the given line 
 		if (*curr_chr == '#') // line start with a comment 
 			return;
 		else if (isalnum(*curr_chr) || *curr_chr == '-' || *curr_chr == '.') {
@@ -422,9 +421,11 @@ int main(int argc, char* argv[]) {
 	save_labels(asm_fp, labels);
 	fseek(asm_fp, 0, SEEK_SET);  // Return the file pointer to the beginning of the file
 
+	// Allocate memory for an instruction
 	Instruction* inst_pt = (Instruction*)calloc(1, sizeof(Instruction));
 	check_dynamic_allocation(inst_pt);
 
+	// Parse and save line-by-line
 	int	curr_address = 0;
 	char line[MAX_LINE_LEN + 1] = { 0 };
 	while (fgets(line, MAX_LINE_LEN + 1, asm_fp) != NULL) {
