@@ -436,7 +436,7 @@ int main(int argc, char* argv[]) {
 				curr_address++;
 		}
 	}
-
+	free(inst_pt);
 	free_labels(labels);
 	fclose(mem_fp);
 	fclose(asm_fp);
